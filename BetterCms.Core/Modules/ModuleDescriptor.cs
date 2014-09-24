@@ -62,6 +62,25 @@ namespace BetterCms.Core.Modules
         public abstract string Name { get; }
 
         /// <summary>
+        /// Gets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public abstract Guid Id { get; }
+
+        /// <summary>
+        /// Flag describe is module root or additional
+        /// </summary>
+        public virtual bool IsRootModule
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Gets the CMS configuration.
         /// </summary>
         /// <value>
@@ -304,9 +323,15 @@ namespace BetterCms.Core.Modules
 
             if (controllerTypes != null)
             {
+                var namespaces = new List<string>();
+
                 foreach (Type controllerType in controllerTypes)
                 {
                     string key = (AreaName + "-" + controllerType.Name).ToUpperInvariant();
+                    if (!namespaces.Contains(controllerType.Namespace))
+                    {
+                        namespaces.Add(controllerType.Namespace);
+                    }
 
                     containerBuilder
                         .RegisterType(controllerType)
@@ -321,9 +346,10 @@ namespace BetterCms.Core.Modules
                         string.Format("bcms_{0}_internal_routes", AreaName),
                         string.Format("{0}/{{controller}}/{{action}}", AreaName),
                         new
-                        {
-                            area = AreaName
-                        });
+                            {
+                                area = AreaName
+                            },
+                        namespaces.ToArray());
             }
         }
         
