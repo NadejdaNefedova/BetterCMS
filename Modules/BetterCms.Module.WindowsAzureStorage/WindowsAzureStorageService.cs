@@ -78,7 +78,7 @@ namespace BetterCms.Module.WindowsAzureStorage
             try
             {
                 var client = cloudStorageAccount.CreateCloudBlobClient();
-                client.ParallelOperationThreadCount = 1;
+                client.DefaultRequestOptions.ParallelOperationThreadCount = 1;
 
                 try
                 {
@@ -109,7 +109,7 @@ namespace BetterCms.Module.WindowsAzureStorage
             try
             {
                 var client = cloudStorageAccount.CreateCloudBlobClient();
-                client.ParallelOperationThreadCount = 1;
+                client.DefaultRequestOptions.ParallelOperationThreadCount = 1;
 
                 var securityEnabled = accessControlEnabledGlobally && !request.IgnoreAccessControl;
                 var currentContainerName = securityEnabled ? securedContainerName : containerName;
@@ -133,7 +133,13 @@ namespace BetterCms.Module.WindowsAzureStorage
                     }
                 }
 
-                var blob = container.GetBlockBlobReference(request.Uri.AbsoluteUri);
+                var blobName = string.Empty;
+                for (var i = 2; i < request.Uri.Segments.Length; i++)
+                {
+                    blobName += request.Uri.Segments[i];
+                }
+
+                var blob = container.GetBlockBlobReference(blobName);
 
                 blob.Properties.ContentType = MimeTypeUtility.DetermineContentType(request.Uri);
                 blob.Properties.CacheControl = CacheControl;

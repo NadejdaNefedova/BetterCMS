@@ -344,6 +344,10 @@
       <Project>{c530025b-8ab7-402d-b60c-000c9a5d0446}</Project>
       <Name>BetterCms.Module.Users</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Modules\BetterCms.Module.WindowsAzureStorage\BetterCms.Module.WindowsAzureStorage.csproj">
+      <Project>{6e8e91d9-aeb9-432f-9647-68fa2def2ca9}</Project>
+      <Name>BetterCms.Module.WindowsAzureStorage</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\cms.config">
